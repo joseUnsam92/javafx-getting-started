@@ -1,5 +1,6 @@
 package org.openjfx;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.chart.LineChart;
@@ -18,16 +19,36 @@ public class MyChart extends VBox {
         myButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                //System.out.printf("");
-                double rand_number;
-                rand_number = genRandVal();
-                series.getData().add(new XYChart.Data<>(4.0, rand_number));
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Runnable updater = new Runnable() {
+                            @Override
+                            public void run() {
+                                    //genRandVal();
+                                series.getData().add(new XYChart.Data<>(5*genRandVal(), genRandVal()));
+                                    //System.out.println("dsdsd");
 
+                                }
+                        };
+                        while (true){
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            Platform.runLater(updater);
+                        }
+
+                    }
+                });
+                thread.setDaemon(true);
+                thread.start();
             }
         });
         getChildren().add(myButton);
-    }
 
+    }
 
     public LineChart buildSampleLineChart() {
         series.getData().add(new XYChart.Data<>(0.0, 0.0));
@@ -36,7 +57,6 @@ public class MyChart extends VBox {
         series.getData().add(new XYChart.Data<>(2.0, 0.865));
         series.getData().add(new XYChart.Data<>(3.0, 0.95));
         series.getData().add(new XYChart.Data<>(4.0, 0.982));
-        series.getData().add(new XYChart.Data<>(5.0, 0.993));
         series.getData().add(new XYChart.Data<>(5.0, 0.993));
 
         LineChart lc = new LineChart(
@@ -47,9 +67,15 @@ public class MyChart extends VBox {
         lc.getData().add(series);
         return lc;
     }
+
+
     public double genRandVal() {
+
         double n;
         n = Math.random();
         return n;
+
     }
+
 }
+
