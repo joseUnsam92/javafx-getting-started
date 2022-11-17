@@ -1,11 +1,22 @@
 package org.openjfx;
 
-public class TestThread extends Thread{
-    public void run(){
-        System.out.println("The thread is now running...");
+public class TestThread extends Thread {
+    private int ThreadNumber;
+
+    public TestThread(int ThreadNumber) {
+        this.ThreadNumber = ThreadNumber;
     }
-    public static void main(String[] args){
-    TestThread obj = new TestThread();
-    obj.start();
+
+    @Override
+    public void run() {
+        System.out.println("The thread is now running from thread number " + ThreadNumber);
+
+    try
+
+    {
+        Thread.sleep(1000);
+    } catch(InterruptedException e){
+
     }
+}
 }

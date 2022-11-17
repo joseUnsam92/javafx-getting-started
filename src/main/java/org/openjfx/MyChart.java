@@ -77,5 +77,8 @@ public class MyChart extends VBox {
 
     }
 
+    public void add(double genRandVal) {
+        series.getData().add(new XYChart.Data<>(5*genRandVal(), genRandVal()));
+    }
 }
 
